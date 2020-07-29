@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="myLoadFunction()">
+    <div class="container">
+        <div class="row">
+            <div id="door1" class="col-md-6">
+                <div class="pin-generator half-width">
+                    <input id="displayNumber"class="form-control" type="text" placeholder="Generate Number">
+                    <button id="random-generator"class="generate-btn">Generate Pin</button>
+                </div>
+            </div>
+            <div id="door2" class="col-md-6">
+                <div class="input-section half-width calculator">
+                    <input id="input_number"class="form-control " type="text"></input>
+                    <div class="numbers">
+                        <div class="calc-body calculator__keys">
+                            <div class="calc-button-row ">
+                              <div onclick="displayme('7')" class="button">7</div>
+                              <div onclick="displayme('8')" class="button">8</div>
+                              <div onclick="displayme('9')" class="button">9</div>
+                            </div>
+                            <div class="calc-button-row ">
+                              <div onclick="displayme('4')" class="button ">4</div>
+                              <div onclick="displayme('5')" class="button ">5</div>
+                              <div onclick="displayme('6')"class="button ">6</div>
+                            </div>
+                            <div class="calc-button-row ">
+                              <div onclick="displayme('1')" class="button ">1</div>
+                              <div onclick="displayme('2')"class="button ">2</div>
+                              <div onclick="displayme('3')"class="button ">3</div>
+                            </div>
+                            <div class="calc-button-row ">
+                                <div onclick="errorCorrection()" class="button"><</div>
+                                <div onclick="displayme('0')" class="button">0</div>
+                                <div onclick="clearDispaly()"  class="button">C</div>
+                            </div>
+                            <div>
+                                <button id="check" onclick="passwodMatching()" type="submit" class="submit-btn">Submit</button>
+                                <p  id="countCheck" class="action-left">3 try left</p>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="notify-section">
+            <p id="pinNotMatch" class="notify">❌ Pin Didn't Match, Please try again</p>
+            <p id="pinMatch" class="notify">✅ Pin Matched... Secret door is opening for you</p>
+        </div>
+    </div>
+    <script>
+        // Dissable Notification section by myLoadFunction()
+        function myLoadFunction(){
+           var unsuccess= document.getElementById('pinNotMatch');
+           unsuccess.style.display='none';
+           var success= document.getElementById('pinMatch');
+           success.style.display='none';
+
+           // document.getElementById('displayNumber').value=fourdigitnumber;
+         
+        }
+
+        //Random Number Generate
+           document.getElementById('random-generator').addEventListener('click',function(){
+           var fourdigitnumber= Math.floor(1000+ Math.random()*9000);
+           document.getElementById('displayNumber').value=fourdigitnumber;
+            myLoadFunction();
+             });
+
+             
+        //Number Pad Operation
+        function displayme(number){
+            var oldNumber= document.getElementById('input_number').value;
+            var result=oldNumber+number;
+            document.getElementById('input_number').value=result;
+        }
+        //Dispaly Crealring
+         function clearDispaly(){
+            document.getElementById('input_number').value="";
+
+         }
+         //Dispaly error Correction
+        function errorCorrection(){
+           var element="";
+            var result= document.getElementById('input_number').value;
+
+           for (let i = 0; i < result.length-1; i++) {
+               var element = element+result[i];
+           }
+           document.getElementById('input_number').value=element;
+                             
+        }
+        //Verification
+
+        function passwodMatching(){
+           var randomNumber=document.getElementById('displayNumber').value;
+           var inputNumber=document.getElementById('input_number').value;
+                    if(inputNumber.length==4){
+                         if(parseInt(randomNumber)==parseInt(inputNumber)){
+
+                                var success= document.getElementById('pinMatch');
+                                success.style.display='block'; 
+                                var success= document.getElementById('door1');
+                                success.style.display='none'; 
+                                var success= document.getElementById('door2');
+                                success.style.display='none'; 
+
+                                      
+
+                         }else{
+  
+                                var unsuccess= document.getElementById('pinNotMatch');
+                                unsuccess.style.display='block';
+                                clickCount();
+                          
+                        
+                         }
+                          
+
+                    }else{
+                        alert('please insert 4 Digit valid numbers');
+
+                    }
+
+
+        }
+       
+     function clickCount(){
+        var count=0;
+        var button = document.getElementById('check');
+        var displayCount = document.getElementById('countCheck');
+         button.onclick = function() {
+             count++
+         
+                 if(count==0){
+                    displayCount.innerHTML = 'Try-2 left';
+                 }else if(count==1){
+                    displayCount.innerHTML = 'Try-1 left';
+
+                 }else{
+                    displayCount.innerHTML = 'Try-0 left';
+                    document.getElementById('check').disabled = true;
+                 }
+        
+         
+        
+       };
+       
+     }
+
+        
+    </script>
+</body>
+</html>
